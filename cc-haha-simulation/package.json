@@ -1,0 +1,15 @@
+{
+  "name": "xingchi-workbench",
+  "version": "999.0.0-local",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.3.14",
+  "bin": {
+    "xingchi-workbench": "./bin/xingchi-workbench"
+  },
+  "scripts": {
+    "xingchi-workbench": "bun --no-env-file run ./bin/xingchi-workbench",
+    "start": "bun --no-env-file run ./bin/xingchi-workbench"
+  },
+  "description": "星炽工作台 - 基于Claude Code的本地优先跨平台桌面工作空间"
+}
