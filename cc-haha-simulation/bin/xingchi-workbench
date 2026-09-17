@@ -1,5 +1,0 @@
-#!/bin/bash
-# Claude Code Haha 启动脚本
-echo "正在启动 Claude Code Haha..."
-echo "版本: 999.0.0-local"
-echo "请配置 .env 文件中的 API Key"
