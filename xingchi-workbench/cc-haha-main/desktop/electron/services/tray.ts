@@ -42,11 +42,11 @@ export async function installTray({
   const { Menu, Tray, nativeImage } = electronRuntime ?? await import('electron')
   const icon = nativeImage.createFromPath(resolveTrayIconPath(desktopRoot))
   const tray = new Tray(icon)
-  tray.setToolTip(app.name || 'Claude Code Haha')
+  tray.setToolTip(app.name || '星炽工作台')
   tray.setContextMenu(Menu.buildFromTemplate([
-    { label: 'Show Claude Code Haha', click: show },
+    { label: '显示星炽工作台', click: show },
     { type: 'separator' },
-    { label: 'Quit Claude Code Haha', click: quit },
+    { label: '退出星炽工作台', click: quit },
   ]))
   tray.on('click', show)
 

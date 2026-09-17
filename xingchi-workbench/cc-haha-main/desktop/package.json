@@ -1,9 +1,9 @@
 {
-  "name": "claude-code-desktop",
+  "name": "xingchi-workbench-desktop",
   "private": true,
   "version": "0.6.4",
-  "description": "Desktop coding agent workbench for Claude Code Haha.",
-  "homepage": "https://github.com/NanmiCoder/cc-haha",
+  "description": "星炽工作台 - 基于cc-haha的桌面端工作台",
+  "homepage": "https://github.com/SC0321/xingchi-workbench",
   "author": {
     "name": "NanmiCoder",
     "email": "relakkes@gmail.com"
@@ -11,8 +11,8 @@
   "type": "module",
   "main": "electron-dist/main.cjs",
   "build": {
-    "appId": "com.claude-code-haha.desktop",
-    "productName": "Claude Code Haha",
+    "appId": "com.xingchi-workbench.desktop",
+    "productName": "星炽工作台",
     "asar": true,
     "asarUnpack": [
       "dist/**",
@@ -24,7 +24,7 @@
       "src-tauri/binaries/**",
       "node_modules/@ngrok/**"
     ],
-    "artifactName": "Claude-Code-Haha-${version}-${os}-${arch}.${ext}",
+    "artifactName": "星炽工作台-${version}-${os}-${arch}.${ext}",
     "npmRebuild": false,
     "directories": {
       "output": "build-artifacts/electron"
