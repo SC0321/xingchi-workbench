@@ -107,7 +107,9 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "lint": "node ./node_modules/eslint/bin/eslint.js src electron && node ./node_modules/typescript/bin/tsc --noEmit"
+    "lint": "node ./node_modules/eslint/bin/eslint.js src electron && node ./node_modules/typescript/bin/tsc --noEmit",
+    "install:macos": "bun run ./scripts/install-macos-app.ts",
+    "electron:install:macos": "bun run electron:package:dir && bun run install:macos"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

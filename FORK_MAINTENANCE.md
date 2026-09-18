@@ -14,6 +14,8 @@ bun run electron:dev
 
 Electron 固定为 42.11.4，仍使用 CommonJS 主进程。不要用 Node/Bun 直接执行 `electron-dist/main.cjs`：普通 Node 解析 `require('electron')` 返回可执行文件路径，不是 Electron API。启动器直接定位 Electron binary，清除 IDE 遗留的 `ELECTRON_RUN_AS_NODE`，不依赖 `path.txt`，因而不需要给 node_modules 打 `.trim()` 补丁。
 
+`electron:install:macos` 会构建最新包并安装到 `/Applications/星炽工作台.app`，同时从 Launchpad 注销开发用 Electron runtime；每次升级重复执行即可，名称和 bundle id 从 `desktop/package.json` 自动读取。
+
 `electron:dev` 会编译后端 sidecar、主进程和 preload，再启动 Vite 与 Electron。macOS 开发模式跳过需要稳定签名证书的 Computer Use helper；聊天工作台可以运行，Computer Use 需要配置稳定签名身份并执行完整 `bun run build:sidecars`。正式打包仍执行原有签名要求。不要绕过下载校验。
 
 本地服务的 OPTIONS 预检只对回环连接、本地/打包来源和声明 Authorization 的请求放行，实际业务请求仍验证令牌。
