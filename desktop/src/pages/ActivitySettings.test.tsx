@@ -198,12 +198,13 @@ describe('ActivitySettings', () => {
 
     expect(getStatsMock).toHaveBeenCalledWith('all')
 
-    expect(screen.getByText('cc-haha')).toBeInTheDocument()
-    expect(screen.getByAltText('cc-haha avatar')).toHaveAttribute('src', '/app-icon.png')
-    expect(screen.getByAltText('cc-haha avatar')).toHaveClass('scale-[1.28]')
-    expect(screen.getByRole('link', { name: 'github.com/NanmiCoder/cc-haha' })).toHaveAttribute(
+    expect(screen.getByText('星炽工作台')).toBeInTheDocument()
+    expect(screen.getByAltText('星炽工作台 avatar')).toHaveAttribute('src', '/branding/sflare-logo.png')
+    expect(screen.getByAltText('星炽工作台 avatar')).toHaveClass('object-contain')
+    expect(screen.getByAltText('星炽工作台 avatar').parentElement).toHaveClass('w-64')
+    expect(screen.getByRole('link', { name: 'github.com/SC0321/xingchi-workbench' })).toHaveAttribute(
       'href',
-      'https://github.com/NanmiCoder/cc-haha',
+      'https://github.com/SC0321/xingchi-workbench',
     )
     expect(screen.getByText('Token Activity')).toBeInTheDocument()
     expect(screen.getByText('Total tokens')).toBeInTheDocument()
@@ -365,10 +366,10 @@ describe('ActivitySettings', () => {
 
     const avatar = screen.getByAltText('Local Captain avatar')
     expect(avatar).toHaveAttribute('src', '/api/desktop-ui/preferences/profile/avatar?mock=1')
-    expect(avatar).not.toHaveClass('scale-[1.28]')
+    expect(avatar).toHaveClass('object-cover')
     fireEvent.error(avatar)
-    expect(avatar).toHaveAttribute('src', '/app-icon.png')
-    expect(avatar).toHaveClass('scale-[1.28]')
+    expect(avatar).toHaveAttribute('src', '/branding/sflare-logo.png')
+    expect(avatar).toHaveClass('object-contain')
 
     fireEvent.click(screen.getByRole('button', { name: 'Edit profile' }))
     fireEvent.change(screen.getByLabelText('Display name'), { target: { value: 'Rejected Name' } })
@@ -399,7 +400,7 @@ describe('ActivitySettings', () => {
     await flushActivityLoad()
 
     expect(deleteProfileAvatarMock).toHaveBeenCalled()
-    expect(screen.getByAltText('cc-haha avatar')).toHaveAttribute('src', '/app-icon.png')
+    expect(screen.getByAltText('星炽工作台 avatar')).toHaveAttribute('src', '/branding/sflare-logo.png')
   })
 
   it('shows localized duration details and the empty usage state', async () => {

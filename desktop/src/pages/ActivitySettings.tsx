@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react'
+import { BRAND } from '../lib/brand'
 import { activityStatsApi, type ActivityStatsResponse, type DailyActivity } from '../api/activityStats'
 import {
   desktopUiPreferencesApi,
@@ -71,12 +72,12 @@ const DATE_LOCALES: Record<Locale, string> = {
   kr: 'ko-KR',
 }
 const DEFAULT_PROFILE: DesktopProfilePreferences = {
-  displayName: 'cc-haha',
-  subtitle: 'github.com/NanmiCoder/cc-haha',
+  displayName: BRAND.name,
+  subtitle: BRAND.repository.replace('https://', ''),
   avatarFile: null,
   avatarUpdatedAt: null,
 }
-const DEFAULT_AVATAR_SRC = publicAssetPath('app-icon.png')
+const DEFAULT_AVATAR_SRC = publicAssetPath(BRAND.logo)
 
 function localDateKey(date: Date) {
   const year = date.getFullYear()
@@ -250,7 +251,11 @@ function buildPluginAndSkillRankItems(stats: ActivityStatsResponse | null) {
 }
 
 function withProfileDefaults(profile: Partial<DesktopProfilePreferences> | null | undefined): DesktopProfilePreferences {
-  return { ...DEFAULT_PROFILE, ...profile }
+  const normalized = { ...DEFAULT_PROFILE, ...profile }
+  if (normalized.displayName === 'cc-haha' && normalized.subtitle === 'github.com/NanmiCoder/cc-haha') {
+    return { ...normalized, displayName: DEFAULT_PROFILE.displayName, subtitle: DEFAULT_PROFILE.subtitle }
+  }
+  return normalized
 }
 
 function getProfileSubtitleHref(subtitle: string) {
@@ -469,6 +474,7 @@ export function ActivitySettings() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [profile, setProfile] = useState<DesktopProfilePreferences>(DEFAULT_PROFILE)
+  const [failedAvatarSrc, setFailedAvatarSrc] = useState<string | null>(null)
   const [profileError, setProfileError] = useState<string | null>(null)
   const [profileStatus, setProfileStatus] = useState<string | null>(null)
   const [isProfileLoading, setIsProfileLoading] = useState(true)
@@ -693,10 +699,11 @@ export function ActivitySettings() {
       value: formatInteger(stats?.totalSessions ?? 0, locale),
     },
   ]
-  const avatarSrc = profile.avatarFile ? getProfileAvatarUrl(profile.avatarUpdatedAt) : DEFAULT_AVATAR_SRC
-  const avatarClassName = profile.avatarFile
+  const hasCustomAvatar = Boolean(profile.avatarFile) && getProfileAvatarUrl(profile.avatarUpdatedAt) !== failedAvatarSrc
+  const avatarSrc = hasCustomAvatar ? getProfileAvatarUrl(profile.avatarUpdatedAt) : DEFAULT_AVATAR_SRC
+  const avatarClassName = hasCustomAvatar
     ? 'h-full w-full object-cover'
-    : 'h-full w-full scale-[1.28] object-contain transition-transform'
+    : 'h-full w-full object-contain'
   const profileSubtitleHref = getProfileSubtitleHref(profile.subtitle)
   const hasUsage = Boolean(stats && (stats.totalSessions > 0 || totalTokens > 0))
   const modeOptions: Array<{ mode: HeatmapMode; label: string; help: string }> = [
@@ -773,14 +780,15 @@ export function ActivitySettings() {
   return (
     <div className="mx-auto w-full max-w-[1060px] min-w-0 pb-12">
       <section className="relative flex min-h-[176px] flex-col items-center justify-start pt-4 text-center">
-        <div className="relative h-16 w-16 overflow-hidden rounded-full border border-[var(--color-border)] bg-[var(--color-surface-container-lowest)] shadow-[var(--shadow-card)]">
+        <div className={hasCustomAvatar
+          ? 'relative h-16 w-16 overflow-hidden rounded-full border border-[var(--color-border)] bg-[var(--color-surface-container-lowest)] shadow-[var(--shadow-card)]'
+          : 'relative h-16 w-64 max-w-full'}>
           <img
             src={avatarSrc}
             alt={`${profile.displayName} avatar`}
             className={avatarClassName}
-            onError={(event) => {
-              event.currentTarget.src = DEFAULT_AVATAR_SRC
-              event.currentTarget.className = 'h-full w-full scale-[1.28] object-contain transition-transform'
+            onError={() => {
+              if (hasCustomAvatar) setFailedAvatarSrc(avatarSrc)
             }}
           />
         </div>

@@ -1,3 +1,4 @@
+import { BRAND } from '@/lib/brand'
 import { useState, useEffect } from 'react'
 import { useSettingsStore } from '../../stores/settingsStore'
 import { useTranslation } from '../../i18n'
@@ -21,15 +22,11 @@ import { isValidHttpProxyUrl } from '../settings/shared'
  * `./shared`, since the General panel needs it too.
  */
 
-const GITHUB_REPO = 'https://github.com/SC0321/xingchi-workbench'
+const GITHUB_REPO = BRAND.repository
 const GITHUB_ISSUES = `${GITHUB_REPO}/issues`
 const GITHUB_RELEASES = `${GITHUB_REPO}/releases`
-const AUTHOR_GITHUB = 'https://github.com/NanmiCoder'
-const SOCIAL_LINKS = [
-  { name: 'Bilibili', icon: '/icons/bilibili.svg', url: 'https://space.bilibili.com/434377496', label: '程序员阿江-Relakkes' },
-  { name: 'Douyin', icon: '/icons/douyin.svg', url: 'https://www.douyin.com/user/MS4wLjABAAAATJPY7LAlaa5X-c8uNdWkvz0jUGgpw4eeXIwu_8BhvqE', label: '程序员阿江-Relakkes' },
-  { name: 'Xiaohongshu', icon: '/icons/xiaohongshu.svg', url: 'https://www.xiaohongshu.com/user/profile/5f58bd990000000001003753', label: '程序员阿江-Relakkes' },
-] as const
+const AUTHOR_GITHUB = BRAND.authorUrl
+const SOCIAL_LINKS = BRAND.socialLinks
 
 export function AboutSettings() {
   const t = useTranslation()
@@ -379,7 +376,7 @@ export function AboutSettings() {
           className="w-full flex items-center gap-3 px-4 py-2.5 rounded-[var(--radius-lg)] hover:bg-[var(--color-surface-hover)] transition-colors cursor-pointer"
         >
           <img src={publicAssetPath('icons/github.svg')} alt="GitHub" className="w-4 h-4 opacity-60" />
-          <span className="text-sm text-[var(--color-text-primary)]">程序员阿江-Relakkes</span>
+          <span className="text-sm text-[var(--color-text-primary)]">{BRAND.author}</span>
           <span className="text-xs text-[var(--color-text-tertiary)] ml-auto">GitHub</span>
         </button>
       </div>
@@ -394,7 +391,7 @@ export function AboutSettings() {
               onClick={() => openUrl(link.url)}
               className="w-full flex items-center gap-3 px-4 py-2.5 rounded-[var(--radius-lg)] hover:bg-[var(--color-surface-hover)] transition-colors cursor-pointer"
             >
-              <img src={publicAssetPath(link.icon)} alt={link.name} className="w-4 h-4 opacity-60" />
+              <img src={publicAssetPath(link.icon)} alt={link.name} className="w-4 h-4 object-contain" />
               <span className="text-sm text-[var(--color-text-primary)]">{link.label}</span>
               <span className="text-xs text-[var(--color-text-tertiary)] ml-auto">{link.name}</span>
             </button>

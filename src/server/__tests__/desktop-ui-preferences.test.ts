@@ -68,8 +68,8 @@ describe('DesktopUiPreferencesService', () => {
     expect(result.preferences).toEqual({
       schemaVersion: 5,
       profile: {
-        displayName: 'cc-haha',
-        subtitle: 'github.com/NanmiCoder/cc-haha',
+        displayName: '星炽工作台',
+        subtitle: 'github.com/SC0321/xingchi-workbench',
         avatarFile: null,
         avatarUpdatedAt: null,
       },
@@ -83,6 +83,31 @@ describe('DesktopUiPreferencesService', () => {
         projectSortBy: 'updatedAt',
       },
     })
+  })
+
+  test('upgrades the legacy default identity and preserves custom profiles and unknown fields', async () => {
+    const service = new DesktopUiPreferencesService()
+    await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
+    const filePath = path.join(tmpDir, 'cc-haha', 'desktop-ui.json')
+    for (const custom of [false, true]) {
+      const profile = {
+        displayName: custom ? 'My workspace' : 'cc-haha',
+        subtitle: 'github.com/NanmiCoder/cc-haha',
+        avatarFile: 'profile/avatar.png',
+        avatarUpdatedAt: '2026-05-09T12:00:00.000Z',
+        futureProfileField: true,
+      }
+      await fs.writeFile(filePath, JSON.stringify({ schemaVersion: 5, profile, futureField: true }))
+      const { preferences } = await service.readPreferences()
+      expect(preferences.profile).toEqual({
+        ...profile,
+        displayName: custom ? 'My workspace' : '星炽工作台',
+        subtitle: custom ? profile.subtitle : 'github.com/SC0321/xingchi-workbench',
+      })
+      expect(preferences.futureField).toBe(true)
+      await service.updateSidebarPreferences({})
+      expect((await readDesktopUiFile()).profile).toEqual(preferences.profile)
+    }
   })
 
   test('normalizes old schema files and preserves unknown fields when updating sidebar preferences', async () => {
@@ -123,8 +148,8 @@ describe('DesktopUiPreferencesService', () => {
       schemaVersion: 5,
       futureField: { keep: true },
       profile: {
-        displayName: 'cc-haha',
-        subtitle: 'github.com/NanmiCoder/cc-haha',
+        displayName: '星炽工作台',
+        subtitle: 'github.com/SC0321/xingchi-workbench',
         avatarFile: null,
         avatarUpdatedAt: null,
       },
@@ -144,8 +169,8 @@ describe('DesktopUiPreferencesService', () => {
       schemaVersion: 5,
       futureField: { keep: true },
       profile: {
-        displayName: 'cc-haha',
-        subtitle: 'github.com/NanmiCoder/cc-haha',
+        displayName: '星炽工作台',
+        subtitle: 'github.com/SC0321/xingchi-workbench',
         avatarFile: null,
         avatarUpdatedAt: null,
       },
@@ -174,7 +199,7 @@ describe('DesktopUiPreferencesService', () => {
 
     expect(result.exists).toBe(false)
     expect(result.preferences.sidebar.hiddenProjects).toEqual([])
-    expect(result.preferences.profile.displayName).toBe('cc-haha')
+    expect(result.preferences.profile.displayName).toBe('星炽工作台')
     expect(result.preferences.pet).toEqual(DEFAULT_PET_PREFERENCES)
     expect(result.preferences.projectDisplayNames).toEqual({})
     expect(files.some((name) => name.startsWith('desktop-ui.json.invalid-'))).toBe(true)
@@ -577,8 +602,8 @@ describe('desktop UI preferences API', () => {
       preferences: {
         schemaVersion: 5,
         profile: {
-          displayName: 'cc-haha',
-          subtitle: 'github.com/NanmiCoder/cc-haha',
+          displayName: '星炽工作台',
+          subtitle: 'github.com/SC0321/xingchi-workbench',
           avatarFile: null,
           avatarUpdatedAt: null,
         },
@@ -604,8 +629,8 @@ describe('desktop UI preferences API', () => {
       preferences: {
         schemaVersion: 5,
         profile: {
-          displayName: 'cc-haha',
-          subtitle: 'github.com/NanmiCoder/cc-haha',
+          displayName: '星炽工作台',
+          subtitle: 'github.com/SC0321/xingchi-workbench',
           avatarFile: null,
           avatarUpdatedAt: null,
         },

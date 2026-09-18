@@ -2067,7 +2067,7 @@ describe('Sidebar', () => {
     const brandRow = () => screen.getByText('星炽工作台').closest('div')
 
     // Expanded, the name carries the brand and the mark beside it is clutter.
-    expect(brandRow()?.querySelector('svg')).toBeNull()
+    expect(brandRow()?.querySelector('img[src="/branding/sflare-logo.png"]')).toBeNull()
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: 'Collapse sidebar' }))
@@ -2075,7 +2075,7 @@ describe('Sidebar', () => {
 
     // Collapsed, the copy is width-clamped to zero, so the mark is the only
     // thing left to identify the app.
-    expect(brandRow()?.querySelector('svg')).not.toBeNull()
+    expect(brandRow()?.querySelector('img[src="/branding/sflare-logo.png"]')).not.toBeNull()
   })
 
   it('renders search controls without the removed embedded project filter', () => {

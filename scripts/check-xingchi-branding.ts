@@ -33,3 +33,10 @@ for (const [file, values] of Object.entries(required)) {
 }
 assert.equal((read('desktop/src/stores/chatStore.ts').match(/title: '星炽工作台/g) ?? []).length, 3)
 console.log('星炽工作台品牌检查通过（配置、窗口、菜单、托盘、通知和 CLI）')
+
+const brand = read('desktop/src/lib/brand.ts')
+for (const value of ['SC0321', 'https://github.com/SC0321/xingchi-workbench', 'branding/sflare-logo.png', 'www.xingchidongli.com']) assert.ok(brand.includes(value))
+assert.ok(read('desktop/src/pages/settings/AboutSettings.tsx').includes('BRAND.author'))
+assert.ok(!read('desktop/src/pages/settings/AboutSettings.tsx').includes('Relakkes'))
+assert.ok(read('desktop/src/components/composite/BrandSeal.tsx').includes('BRAND.logo'))
+for (const file of ['desktop/public/branding/sflare-logo.png', 'desktop/public/app-icon.png', 'desktop/src-tauri/icons/icon.icns', 'desktop/src-tauri/icons/icon.ico']) assert.ok(existsSync(path.join(root, file)))
