@@ -49,7 +49,7 @@ import {
 } from './services/appMode'
 import { installMacOsChromiumKeychainPromptGuard } from './services/keychain'
 import { installStdioWriteFailureGuards } from './services/stdioGuards'
-import { applyWindowsAppUserModelId } from './services/appIdentity'
+import { applyWindowsAppUserModelId, DESKTOP_APP_NAME } from './services/appIdentity'
 import { installMainWindowNavigationGuards, installPreviewNavigationGuards } from './services/navigationGuards'
 import { installPreviewCleanupOnRendererNavigation } from './services/previewLifecycle'
 import { logNotificationSmokeRendererAck, scheduleNotificationSmoke } from './services/notificationSmoke'
@@ -116,6 +116,7 @@ let trayController: TrayController | null = null
 // Must run before anything logs: a Finder/Dock launch inherits unreadable
 // stdio, and an unguarded write failure there surfaces as a crash dialog.
 installStdioWriteFailureGuards()
+app.setName(DESKTOP_APP_NAME)
 installMacOsChromiumKeychainPromptGuard(app)
 
 function appRoot() {
@@ -876,6 +877,7 @@ async function createMainWindow() {
   const restoredState = readWindowState(app, screen.getAllDisplays())
   const bounds = windowOptionsFromState(restoredState)
   mainWindow = new BrowserWindow({
+    title: DESKTOP_APP_NAME,
     ...bounds,
     minWidth: MIN_WINDOW_WIDTH,
     minHeight: MIN_WINDOW_HEIGHT,

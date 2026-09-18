@@ -21,7 +21,7 @@ function readBuildScript() {
 
 function readCliLauncher() {
   return readFileSync(
-    path.resolve(import.meta.dirname, '../../bin/claude-haha'),
+    path.resolve(import.meta.dirname, '../../bin/xingchi-workbench'),
     'utf8',
   )
 }
@@ -666,7 +666,7 @@ describe('build-sidecars cu-helper macOS gating', () => {
     // guard, so non-macOS sidecar builds keep using the Python helper instead of
     // attempting a macOS-only Swift build.
     const guarded = source.match(
-      /if \(process\.platform === 'darwin' && cuHelperArch\) \{\s*await buildCuHelper\(cuHelperArch\)\s*\}/,
+      /if \(process\.platform === 'darwin' && cuHelperArch && !process\.argv\.includes\('--dev'\)\) \{\s*await buildCuHelper\(cuHelperArch\)\s*\}/,
     )
     expect(guarded).not.toBeNull()
   })

@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 import {
   classifyH5Request,
+  isLocalDesktopPreflight,
   isLocalCredentialOnlyPath,
   isLoopbackHost,
   requiresLocalAccessCredential,
@@ -591,5 +592,28 @@ describe('h5AccessPolicy', () => {
       explicitAuthRequired: true,
       context: remoteContext,
     })).toBe(false)
+  })
+})
+
+describe('desktop credential CORS preflight', () => {
+  const url = new URL('http://127.0.0.1:3456/api/h5-access')
+  const make = (origin = 'http://localhost:1420', extra = {}) => new Request(url, {
+    method: 'OPTIONS', headers: { Origin: origin, 'Access-Control-Request-Method': 'GET', 'Access-Control-Request-Headers': 'authorization, content-type', ...extra },
+  })
+  test('allows loopback and packaged renderer preflight without authorizing the actual call', () => {
+    const context = { ...localContext, localAccessTokenConfigured: true }
+    for (const origin of ['http://localhost:1420', 'file://', 'null']) {
+      expect(isLocalDesktopPreflight(make(origin), url, context)).toBe(true)
+    }
+    const actual = new Request(url, { headers: { Origin: 'http://localhost:1420' } })
+    expect(isLocalDesktopPreflight(actual, url, context)).toBe(false)
+    expect(classifyH5Request(actual, url, context)).toBe('h5-browser')
+  })
+  test('rejects LAN peers, remote origins, proxies and missing peer information', () => {
+    expect(isLocalDesktopPreflight(make(), url, remoteContext)).toBe(false)
+    expect(isLocalDesktopPreflight(make(), url, { clientAddress: null })).toBe(false)
+    expect(isLocalDesktopPreflight(make('https://attacker.example'), url, localContext)).toBe(false)
+    expect(isLocalDesktopPreflight(make('http://localhost:1420', { 'X-Forwarded-For': '127.0.0.1' }), url, localContext)).toBe(false)
+    expect(isLocalDesktopPreflight(make(), new URL('http://192.168.0.1/api/status'), localContext)).toBe(false)
   })
 })

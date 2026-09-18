@@ -71,8 +71,12 @@ console.log(`[build-sidecars] Built desktop sidecar for ${targetTriple} (${bunTa
 // STABLE identity + hardened runtime, and re-signing would rotate its TCC
 // identity, dropping the user's Accessibility + Screen Recording grants.
 const cuHelperArch = resolveCuHelperArch(targetTriple)
-if (process.platform === 'darwin' && cuHelperArch) {
+// Desktop development does not require the separately signed Computer Use helper.
+// Release builds keep the mandatory stable-signature path.
+if (process.platform === 'darwin' && cuHelperArch && !process.argv.includes('--dev')) {
   await buildCuHelper(cuHelperArch)
+} else if (process.platform === 'darwin' && cuHelperArch) {
+  console.log('[build-sidecars] dev mode: skipping signed Computer Use helper; run build:sidecars with a stable signing identity to enable it')
 }
 
 async function stageHostRipgrepForOfflineBuild() {

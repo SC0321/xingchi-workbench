@@ -372,6 +372,24 @@ describe('remote H5 auth and CORS integration', () => {
     expect(desktopResponse.status).toBe(200)
   })
 
+  test('allows credentialed desktop preflight while retaining actual API authentication', async () => {
+    process.env.CC_HAHA_LOCAL_ACCESS_TOKEN = 'desktop-local-secret'
+    await restartRemoteServer()
+    for (const route of ['/api/status', '/api/h5-access']) {
+      for (const origin of ['http://localhost:1420', 'null']) {
+        const preflight = await fetch(`${baseUrl}${route}`, {
+          method: 'OPTIONS', headers: { Origin: origin, 'Access-Control-Request-Method': 'GET', 'Access-Control-Request-Headers': 'authorization, content-type' },
+        })
+        expect(preflight.status).toBe(204)
+        expect(preflight.headers.get('Access-Control-Allow-Origin')).toBe(origin)
+        const denied = await fetch(`${baseUrl}${route}`, { headers: { Origin: origin } })
+        expect(denied.status).toBe(403)
+        const allowed = await fetch(`${baseUrl}${route}`, { headers: { Origin: origin, Authorization: 'Bearer desktop-local-secret' } })
+        expect(allowed.status).toBe(200)
+      }
+    }
+  })
+
   test('still requires the desktop process token for the H5 control plane', async () => {
     process.env.CC_HAHA_LOCAL_ACCESS_TOKEN = 'desktop-local-secret'
     await restartRemoteServer()

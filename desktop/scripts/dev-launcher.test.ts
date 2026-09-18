@@ -41,6 +41,14 @@ describe('desktop dev launcher environment', () => {
     expect(env.no_proxy).toBe(env.NO_PROXY)
   })
 
+  it.each(['1', '0', ''])('removes inherited Electron Node mode (%j) without mutating the parent', value => {
+    const parent = { ELECTRON_RUN_AS_NODE: value, KEEP_ME: 'present' }
+    const child = createElectronDevEnv(parent)
+    expect(child).not.toHaveProperty('ELECTRON_RUN_AS_NODE')
+    expect(child.KEEP_ME).toBe('present')
+    expect(parent.ELECTRON_RUN_AS_NODE).toBe(value)
+  })
+
   it('deduplicates no_proxy entries', () => {
     expect(mergeNoProxy('localhost,127.0.0.1')).toBe('localhost,127.0.0.1,::1')
   })

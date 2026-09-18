@@ -29,6 +29,7 @@ import { ensurePersistentStorageUpgraded } from './services/persistentStorageMig
 import { handleStaticH5Request } from './staticH5.js'
 import {
   classifyH5Request,
+  isLocalDesktopPreflight,
   isH5AccessControlPath,
   isLocalCredentialOnlyPath,
   requiresLocalAccessCredential,
@@ -349,6 +350,11 @@ export function startServer(port = PORT, host = HOST) {
             candidateOrigin === h5PublicOrigin ||
             await h5AccessService.isOriginAllowed(candidateOrigin),
         })
+        // Chromium omits Authorization from OPTIONS. The following business
+        // request still passes through every credential and H5 gate below.
+        if (isLocalDesktopPreflight(req, url, h5RequestContext) && !cors.rejected) {
+          return new Response(null, { status: 204, headers: cors.headers })
+        }
         const authRequired = shouldRequireH5Token({
           request: req,
           url,

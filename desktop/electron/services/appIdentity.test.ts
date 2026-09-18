@@ -2,9 +2,14 @@ import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it, vi } from 'vitest'
-import { applyWindowsAppUserModelId, WINDOWS_APP_USER_MODEL_ID } from './appIdentity'
+import { applyWindowsAppUserModelId, DESKTOP_APP_NAME, WINDOWS_APP_USER_MODEL_ID } from './appIdentity'
 
 describe('applyWindowsAppUserModelId', () => {
+  it('keeps the runtime name in sync with the packaged product', () => {
+    const pkg = JSON.parse(readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '../../package.json'), 'utf8'))
+    expect(DESKTOP_APP_NAME).toBe(pkg.build.productName)
+  })
+
   it('sets the AppUserModelID on Windows so toast notifications are attributed to the app', () => {
     const setAppUserModelId = vi.fn()
     const result = applyWindowsAppUserModelId({ setAppUserModelId }, 'win32')

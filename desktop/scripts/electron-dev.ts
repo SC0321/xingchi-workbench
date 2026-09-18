@@ -21,12 +21,16 @@ export function mergeNoProxy(existing: string | undefined, required = LOCAL_NO_P
 export function createElectronDevEnv(env: NodeJS.ProcessEnv = process.env) {
   const rendererUrl = env.ELECTRON_RENDERER_URL ?? DEFAULT_RENDERER_URL
   const noProxy = mergeNoProxy(env.NO_PROXY ?? env.no_proxy)
-  return {
+  const childEnv = {
     ...env,
     ELECTRON_RENDERER_URL: rendererUrl,
     NO_PROXY: noProxy,
     no_proxy: noProxy,
   }
+  // IDEs may run their own Electron executable in Node mode. Never inherit
+  // that mode when launching the desktop application. Even "0" enables it.
+  delete childEnv.ELECTRON_RUN_AS_NODE
+  return childEnv
 }
 
 export function resolveElectronExecutable(desktopRoot: string, platform = process.platform) {
@@ -92,7 +96,7 @@ async function main() {
 
   await waitForRenderer(rendererUrl)
 
-  const electron = spawn(resolveElectronExecutable(desktopRoot), ['./electron-dist/main.cjs'], {
+  const electron = spawn(resolveElectronExecutable(desktopRoot), ['.'], {
     cwd: desktopRoot,
     env: childEnv,
     stdio: 'inherit',

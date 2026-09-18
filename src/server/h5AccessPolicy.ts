@@ -378,3 +378,15 @@ function isH5BrowserCapabilityPath(pathname: string): boolean {
     pathname.startsWith('/proxy/') ||
     pathname.startsWith('/ws/')
 }
+
+/** Preflights cannot carry the process token; only advertise CORS, never authorize an API call. */
+export function isLocalDesktopPreflight(request: Request, url: URL, context: H5RequestContext): boolean {
+  if (request.method !== 'OPTIONS' || !context.clientAddress) return false
+  if (!isLoopbackHost(context.clientAddress) || !isLoopbackHost(url.hostname)) return false
+  if (hasProxyTraceHeaders(request.headers)) return false
+  if (!['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(request.headers.get('Access-Control-Request-Method') ?? '')) return false
+  const headers = (request.headers.get('Access-Control-Request-Headers') ?? '').toLowerCase().split(',').map(value => value.trim())
+  if (!headers.includes('authorization')) return false
+  const origin = request.headers.get('Origin')
+  return origin === 'null' || origin === 'file://' || (origin !== null && isLoopbackBrowserOrigin(origin))
+}
