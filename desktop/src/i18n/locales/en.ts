@@ -1,4 +1,5 @@
 export const en = {
+  'app.name': '星炽工作台',
   "extensions.myPlugins": "My plugins",
   "extensions.mySkills": "My skills",
   "extensions.browse": "Back to browse",
@@ -2218,7 +2219,7 @@ Row 9, all 8 cells: continuing from straight down, turning left through lower-le
   'settings.general.notificationsStatusUnsupported': 'Unavailable in this environment',
   'settings.general.notificationsAuthorize': 'Authorize',
   'settings.general.notificationsOpenSettings': 'Open Settings',
-  'settings.general.notificationsTestTitle': 'Claude Code Haha notifications are enabled',
+  'settings.general.notificationsTestTitle': '星炽工作台 notifications are enabled',
   'settings.general.notificationsTestBody': 'Permission prompts and completed agent replies will now use system notifications.',
   'settings.general.traceTitle': 'Agent trace',
   'settings.general.traceDescription': 'Collect local model request traces for stuck sessions, failed calls, and unexpected waits.',

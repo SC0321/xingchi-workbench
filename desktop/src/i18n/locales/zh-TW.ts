@@ -2,6 +2,7 @@ import type {
  TranslationKey } from './en'
 
 export const zh: Record<TranslationKey, string> = {
+  'app.name': '星炽工作台',
   "extensions.myPlugins": "我的外掛",
   "extensions.mySkills": "我的技能",
   "extensions.browse": "返回瀏覽",
@@ -1366,7 +1367,7 @@ export const zh: Record<TranslationKey, string> = {
   'settings.providers.ccSwitch.unavailableTitle': '讀不到 cc-switch 設定',
   'settings.providers.ccSwitch.unavailableNotFound': '找不到 cc-switch 設定。請先安裝 cc-switch 並至少新增一個服務商。',
   'settings.providers.ccSwitch.unavailableUnreadable': 'cc-switch 設定無法讀取，請檢查檔案權限後重試。',
-  'settings.providers.ccSwitch.unavailableSchema': '目前 cc-switch 版本的設定結構 cc-haha 尚未支援。請更新 cc-haha，或手動新增該服務商。',
+  'settings.providers.ccSwitch.unavailableSchema': '目前 cc-switch 版本的設定結構 星炽工作台 尚未支援。請更新 星炽工作台，或手動新增該服務商。',
   'settings.providers.ccSwitch.unavailableTooOld': '目前 cc-switch 使用的設定格式連 cc-switch 自己都已不再支援。匯入需要 cc-switch v3.1.0 或更新版本。',
   'settings.providers.ccSwitch.unavailableSqlite': '目前版本無法開啟 cc-switch 資料庫。請改為手動新增服務商。',
   'settings.providers.ccSwitch.configDir': '設定目錄：{path}',
@@ -2109,7 +2110,7 @@ export const zh: Record<TranslationKey, string> = {
   'settings.general.storagePortableTitle': '使用自訂目錄',
   'settings.general.storagePortableDescription': '把桌面端資料寫入你明確選擇的資料夾。必須使用絕對路徑，而且不能放在應用安裝目錄內。',
   'settings.general.storagePortableDirLabel': '自訂資料目錄',
-  'settings.general.storagePortableDirPlaceholder': '選擇一個用於儲存 cc-haha 資料的資料夾',
+  'settings.general.storagePortableDirPlaceholder': '選擇一個用於儲存 星炽工作台 資料的資料夾',
   'settings.general.storageChooseDir': '選擇目錄',
   'settings.general.storageChooseDirTitle': '選擇自訂資料目錄',
   'settings.general.storageApplyPortable': '使用這個目錄並重啟',
@@ -2220,7 +2221,7 @@ export const zh: Record<TranslationKey, string> = {
   'settings.general.notificationsStatusUnsupported': '當前環境不可用',
   'settings.general.notificationsAuthorize': '授權通知',
   'settings.general.notificationsOpenSettings': '開啟系統設定',
-  'settings.general.notificationsTestTitle': 'Claude Code Haha 通知已啟用',
+  'settings.general.notificationsTestTitle': '星炽工作台 通知已啟用',
   'settings.general.notificationsTestBody': '後續授權確認和 Agent 回覆完成都會透過系統通知提醒。',
   'settings.general.traceTitle': 'Agent Trace',
   'settings.general.traceDescription': '收集本地會話的模型請求鏈路，用於排查卡住、失敗和異常等待。',

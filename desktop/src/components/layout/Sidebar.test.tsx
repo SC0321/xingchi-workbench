@@ -57,6 +57,7 @@ vi.mock('../../stores/openTargetStore', () => ({
 vi.mock('../../i18n', () => ({
   useTranslation: () => (key: string, params?: Record<string, string | number>) => {
     const translations: Record<string, string> = {
+      'app.name': '星炽工作台',
       'sidebar.newSession': 'New Session',
       'sidebar.scheduled': 'Scheduled',
       'sidebar.extensions': 'Extension Market',
@@ -529,12 +530,12 @@ describe('Sidebar', () => {
   // how far the sidebar had been dragged. Only the short one ships now — and
   // the long one must not linger in the DOM, since a display-hidden copy still
   // reaches screen readers and in-page search.
-  it('renders one wordmark and it is the short one', () => {
+  it('renders the Chinese fork name at every sidebar width', () => {
     render(<Sidebar />)
 
     const region = screen.getByTestId('sidebar-title-region')
 
-    expect(region).toHaveTextContent('cc-haha')
+    expect(region).toHaveTextContent('星炽工作台')
     expect(region).not.toHaveTextContent('Claude Code')
   })
 
@@ -2063,7 +2064,7 @@ describe('Sidebar', () => {
 
     // Scope to the wordmark's own row — the GitHub link in the same header is
     // also an svg and would answer a looser query.
-    const brandRow = () => screen.getByText('haha').closest('div')
+    const brandRow = () => screen.getByText('星炽工作台').closest('div')
 
     // Expanded, the name carries the brand and the mark beside it is clutter.
     expect(brandRow()?.querySelector('svg')).toBeNull()
