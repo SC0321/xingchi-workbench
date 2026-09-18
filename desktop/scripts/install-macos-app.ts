@@ -36,6 +36,9 @@ await cp(source, destination, { recursive: true })
 
 const lsregister = '/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister'
 const runtimeApp = path.join(desktopRoot, 'node_modules', 'electron', 'dist', 'Electron.app')
+for (const staleApp of [...sourceCandidates, runtimeApp]) {
+  if (staleApp !== destination) spawnSync(lsregister, ['-u', staleApp], { stdio: 'ignore' })
+}
 // The development runtime is needed by electron:dev, but should not appear as
 // a second user-facing application in Launchpad after installing the product.
 spawnSync(lsregister, ['-u', runtimeApp], { stdio: 'ignore' })
